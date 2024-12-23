@@ -73,7 +73,7 @@ jobs:
 
         - uses: darklab8/fl-darkstat/.github/actions/build@master
           with:
-            site-root: "/fl-data-discovery/"
+            site-root: "/fl-data-flsr/"
             freelancer-folder: ${{ github.workspace }}/freelancer_folder
             heading: <a href="https://github.com/darklab8/fl-darkstat">Darkstat</a> from <a href="https://darklab8.github.io/blog/pet_projects.html#DiscoveryFreelancercommunity">DarkTools</a> for <a href="https://github.com/darklab8/fl-data-flsr">FLSR</a>
 
