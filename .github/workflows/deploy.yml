@@ -54,8 +54,10 @@ jobs:
               go-version: 1.22.5
 
         - name: Patch to latest
-          run: go run ${{ github.workspace }}/autopatch.go
-          working-directory: ${{ github.workspace }}/freelancer_folder
+          run: |
+            cp autopatch.go ${{ github.workspace }}/freelancer_folder
+            cd ${{ github.workspace }}/freelancer_folder
+            go run autopatch.go
 
         - name: temporal fix to flsr bugs
           shell: python
