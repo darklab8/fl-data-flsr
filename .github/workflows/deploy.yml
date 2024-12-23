@@ -1,0 +1,82 @@
+name: Publish
+
+on:
+  push: {}
+  workflow_dispatch: {}
+  repository_dispatch:
+    types: [publish]
+
+jobs:
+  github-pages:
+    name: Github Pages
+    runs-on: ubuntu-22.04
+    permissions:
+        contents: read
+        pages: write
+        id-token: write
+    environment:
+        name: github-pages
+        url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+        - name: Check out source repository
+          uses: actions/checkout@v2
+
+        # may be u will figure out how to cache for FLSR too :)
+        # - name: Download lock file
+        #   run: wget https://patch.discoverygc.com/patchlist.xml
+        # - name: Cache Freelancer
+        #   id: cache-freelancer
+        #   uses: actions/cache@v3
+        #   with:
+        #     key: ${{ runner.os }}-freelancer-discovery-${{ hashFiles('patchlist.xml') }}
+        #     path: ${{ github.workspace }}/freelancer_folder
+
+        - uses: darklab8/fl-configs/.github/actions/checkout-freelancer@master
+          with:
+            freelancer-mod: "vanilla"
+            freelancer-folder: ${{ github.workspace }}/freelancer_folder
+            ssh-key-base64-vanilla: ${{ secrets.ID_RSA_FILES_FREELANCER_VANILLA }}
+        
+        - run: |
+            git clone https://github.com/Freelancer-Sirius-Revival/FLSR.git
+            git fetch --tags
+            latestTag=$(git describe --tags "$(git rev-list --tags --max-count=1)")
+            git checkout $latestTag
+        
+        - name: Set up Go
+          uses: actions/setup-go@v3
+          with:
+              go-version: 1.22.5
+
+        - name: Patch to latest
+          run: go run ${{ github.workspace }}/autopatch.go
+          working-directory: ${{ github.workspace }}/freelancer_folder
+
+        - name: temporal fix to flsr bugs
+          shell: python
+          run: |
+            filename = "${{ github.workspace }}/freelancer_folder/DATA/UNIVERSE/SYSTEMS/BR06/br06.ini"
+            with open(filename, "r") as file:
+              data = file.read()
+
+            replaced = data.replace("faction = cl_01_grp, 0-8", "faction = cl_01_grp, 0.8")
+
+            with open(filename, "w") as file:
+              file.write(replaced)
+
+        - uses: darklab8/fl-darkstat/.github/actions/build@master
+          with:
+            site-root: "/fl-data-discovery/"
+            freelancer-folder: ${{ github.workspace }}/freelancer_folder
+            heading: <a href="https://github.com/darklab8/fl-darkstat">Darkstat</a> from <a href="https://darklab8.github.io/blog/pet_projects.html#DiscoveryFreelancercommunity">DarkTools</a> for <a href="https://github.com/darklab8/fl-data-flsr">FLSR</a>
+
+        - uses: actions/upload-pages-artifact@v1
+          with:
+            name: github-pages
+            path: ./build
+        
+        # Turn on ability to deploy to pages in repository settings, Pages tab
+        # choose "Github Actions" deployment method to Pages
+        - name: Deploy to pages
+          uses: actions/deploy-pages@v1
+          id: deployment
