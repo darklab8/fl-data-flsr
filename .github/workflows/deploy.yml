@@ -21,28 +21,33 @@ jobs:
         - name: Check out source repository
           uses: actions/checkout@v2
 
-        # may be u will figure out how to cache for FLSR too :)
-        # - name: Download lock file
-        #   run: wget https://patch.discoverygc.com/patchlist.xml
-        # - name: Cache Freelancer
-        #   id: cache-freelancer
-        #   uses: actions/cache@v3
-        #   with:
-        #     key: ${{ runner.os }}-freelancer-discovery-${{ hashFiles('patchlist.xml') }}
-        #     path: ${{ github.workspace }}/freelancer_folder
+        - name: Find Latest Flsr Tag
+          id: data
+          run: |
+            echo "BUILD_VERSION=$(curl -s  "https://api.github.com/repos/Freelancer-Sirius-Revival/FLSR/tags" | jq -r '.[0].name')" >> $GITHUB_OUTPUT
+        - name: Cache Freelancer
+          id: cache-freelancer
+          uses: actions/cache@v3
+          with:
+            key: ${{ runner.os }}-freelancer-flsr-${{ steps.data.outputs.BUILD_VERSION }}
+            path: ${{ github.workspace }}/Freelancer
+        - name: Load latest flsr
+          if: ${{ steps.cache-freelancer.outputs.cache-hit != 'true' }}
+          run: |
+            git clone https://github.com/Freelancer-Sirius-Revival/FLSR.git
+            cd FLSR
+            git fetch --tags
+            latestTag=$(git describe --tags "$(git rev-list --tags --max-count=1)")
+            git checkout $latestTag
+            cd ..
+            mv FLSR/Freelancer/ .
 
         - uses: darklab8/fl-configs/.github/actions/checkout-freelancer@master
           with:
             freelancer-mod: "vanilla"
             freelancer-folder: ${{ github.workspace }}/freelancer_folder
             ssh-key-base64-vanilla: ${{ secrets.ID_RSA_FILES_FREELANCER_VANILLA }}
-        
-        - run: |
-            git clone https://github.com/Freelancer-Sirius-Revival/FLSR.git
-            git fetch --tags
-            latestTag=$(git describe --tags "$(git rev-list --tags --max-count=1)")
-            git checkout $latestTag
-        
+
         - name: Set up Go
           uses: actions/setup-go@v3
           with:
