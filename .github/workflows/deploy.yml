@@ -3,6 +3,8 @@ name: Publish
 on:
   push: {}
   workflow_dispatch: {}
+  schedule:
+    - cron: '0 10,20 * * *'
   repository_dispatch:
     types: [publish]
 
@@ -75,7 +77,7 @@ jobs:
           with:
             site-root: "/fl-data-flsr/"
             freelancer-folder: ${{ github.workspace }}/freelancer_folder
-            heading: <a href="https://github.com/darklab8/fl-darkstat">Darkstat</a> from <a href="https://darklab8.github.io/blog/pet_projects.html#DiscoveryFreelancercommunity">DarkTools</a> for <a href="https://github.com/darklab8/fl-data-flsr">FLSR ${{ steps.data.outputs.BUILD_VERSION }}</a>
+            heading: <a href="https://github.com/darklab8/fl-darkstat">Darkstat</a> from <a href="https://darklab8.github.io/blog/pet_projects.html#Freelancercommunity">DarkTools</a> for <a href="https://github.com/darklab8/fl-data-flsr">FLSR ${{ steps.data.outputs.BUILD_VERSION }}</a>
 
         - uses: actions/upload-pages-artifact@v1
           with:
