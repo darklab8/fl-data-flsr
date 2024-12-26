@@ -31,10 +31,16 @@ jobs:
           id: cache-freelancer
           uses: actions/cache@v3
           with:
-            key: ${{ runner.os }}-flsr-${{ steps.data.outputs.BUILD_VERSION }}
-            path: ${{ github.workspace }}/FLSR
+            key: ${{ runner.os }}-freelancer-${{ steps.data.outputs.BUILD_VERSION }}
+            path: ${{ github.workspace }}/Freelancer
+        - name: Cache FLHook
+          id: cache-flhook
+          uses: actions/cache@v3
+          with:
+            key: ${{ runner.os }}-flhook-${{ steps.data.outputs.BUILD_VERSION }}
+            path: ${{ github.workspace }}/FLHook
         - name: Load latest flsr
-          if: ${{ steps.cache-freelancer.outputs.cache-hit != 'true' }}
+          if: ${{ steps.cache-freelancer.outputs.cache-hit != 'true' || steps.cache-flhook.outputs.cache-hit != 'true' }}
           run: |
             git clone https://github.com/Freelancer-Sirius-Revival/FLSR.git
             cd FLSR
@@ -42,6 +48,8 @@ jobs:
             latestTag=$(git describe --tags "$(git rev-list --tags --max-count=1)")
             git checkout $latestTag
             cd ..
+            mv FLSR/Freelancer/ .
+            mv FLSR/FLHook/ .
 
         - uses: darklab8/fl-configs/.github/actions/checkout-freelancer@master
           with:
@@ -51,7 +59,6 @@ jobs:
 
         - name: ShowInside
           run: |
-            ls ${{ github.workspace }}/FLSR
             ls ${{ github.workspace }}/freelancer_folder
 
         - name: Set up Go
@@ -67,15 +74,13 @@ jobs:
 
         - name: ShowInside
           run: |
-            ls ${{ github.workspace }}/FLSR
             ls ${{ github.workspace }}/freelancer_folder
 
         - name: Sprinkle with FLSR recipes
-          run: cp -r FLSR/FLHook/2.0/plugins/flsr_plugin ${{ github.workspace }}/freelancer_folder
+          run: cp -r FLHook/2.0/plugins/flsr_plugin ${{ github.workspace }}/freelancer_folder
 
         - name: ShowInside
           run: |
-            ls ${{ github.workspace }}/FLSR
             ls ${{ github.workspace }}/freelancer_folder
 
         - name: temporal fix to flsr bugs

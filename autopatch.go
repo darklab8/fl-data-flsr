@@ -13,7 +13,7 @@ func main() {
 	// var patch autopatcher.Patch = autopatcher.Patch{}
 	freelancer_folder := autopatcher.ScanCaseInsensitiveFS(".")
 	freelancer_folder_path := utils_os.GetCurrentFolder()
-	patch_folder_path := freelancer_folder_path.Dir().Join("FLSR", "Freelancer")
+	patch_folder_path := freelancer_folder_path.Dir().Join("Freelancer")
 	patch_folder := autopatcher.ScanCaseInsensitiveFS(patch_folder_path.ToString())
 
 	for _, file := range patch_folder.Files {
