@@ -57,10 +57,6 @@ jobs:
             freelancer-folder: ${{ github.workspace }}/freelancer_folder
             ssh-key-base64-vanilla: ${{ secrets.ID_RSA_FILES_FREELANCER_VANILLA }}
 
-        - name: ShowInside
-          run: |
-            ls ${{ github.workspace }}/freelancer_folder
-
         - name: Set up Go
           uses: actions/setup-go@v3
           with:
@@ -72,16 +68,8 @@ jobs:
             cd ${{ github.workspace }}/freelancer_folder
             go run autopatch.go
 
-        - name: ShowInside
-          run: |
-            ls ${{ github.workspace }}/freelancer_folder
-
         - name: Sprinkle with FLSR recipes
           run: cp -r FLHook/2.0/plugins/flsr_plugin ${{ github.workspace }}/freelancer_folder
-
-        - name: ShowInside
-          run: |
-            ls ${{ github.workspace }}/freelancer_folder
 
         - name: temporal fix to flsr bugs
           shell: python
@@ -99,7 +87,7 @@ jobs:
           with:
             site-root: "/fl-data-flsr/"
             freelancer-folder: ${{ github.workspace }}/freelancer_folder
-            heading: <a href="https://github.com/darklab8/fl-darkstat">Darkstat</a> from <a href="https://darklab8.github.io/blog/pet_projects.html#Freelancercommunity">DarkTools</a> for <a href="https://github.com/darklab8/fl-data-flsr">FLSR ${{ steps.data.outputs.BUILD_VERSION }}</a>
+            heading: <a href="https://github.com/darklab8/fl-darkstat">Darkstat</a> from <a href="https://darklab8.github.io/blog/pet_projects.html#Freelancercommunity">DarkTools</a> for <a href="https://github.com/darklab8/fl-data-flsr">FLSR</a> of <a href="https://api.github.com/repos/Freelancer-Sirius-Revival/FLSR/tags">${{ steps.data.outputs.BUILD_VERSION }}</a>
 
         - uses: actions/upload-pages-artifact@v1
           with:
