@@ -49,6 +49,11 @@ jobs:
             freelancer-folder: ${{ github.workspace }}/freelancer_folder
             ssh-key-base64-vanilla: ${{ secrets.ID_RSA_FILES_FREELANCER_VANILLA }}
 
+        - name: ShowInside
+          run: |
+            ls ${{ github.workspace }}/FLSR
+            ls ${{ github.workspace }}/freelancer_folder
+
         - name: Set up Go
           uses: actions/setup-go@v3
           with:
@@ -60,11 +65,18 @@ jobs:
             cd ${{ github.workspace }}/freelancer_folder
             go run autopatch.go
 
+        - name: ShowInside
+          run: |
+            ls ${{ github.workspace }}/FLSR
+            ls ${{ github.workspace }}/freelancer_folder
+
         - name: Sprinkle with FLSR recipes
           run: cp -r FLSR/FLHook/2.0/plugins/flsr_plugin ${{ github.workspace }}/freelancer_folder
 
         - name: ShowInside
-          run: ls ${{ github.workspace }}/freelancer_folder
+          run: |
+            ls ${{ github.workspace }}/FLSR
+            ls ${{ github.workspace }}/freelancer_folder
 
         - name: temporal fix to flsr bugs
           shell: python
