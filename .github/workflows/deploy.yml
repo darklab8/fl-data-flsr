@@ -31,8 +31,8 @@ jobs:
           id: cache-freelancer
           uses: actions/cache@v3
           with:
-            key: ${{ runner.os }}-freelancer-flsr-${{ steps.data.outputs.BUILD_VERSION }}
-            path: ${{ github.workspace }}/Freelancer
+            key: ${{ runner.os }}-flsr-${{ steps.data.outputs.BUILD_VERSION }}
+            path: ${{ github.workspace }}/FLSR
         - name: Load latest flsr
           if: ${{ steps.cache-freelancer.outputs.cache-hit != 'true' }}
           run: |
@@ -41,8 +41,6 @@ jobs:
             git fetch --tags
             latestTag=$(git describe --tags "$(git rev-list --tags --max-count=1)")
             git checkout $latestTag
-            cd ..
-            mv FLSR/Freelancer/ .
 
         - uses: darklab8/fl-configs/.github/actions/checkout-freelancer@master
           with:
@@ -60,6 +58,9 @@ jobs:
             cp autopatch.go ${{ github.workspace }}/freelancer_folder
             cd ${{ github.workspace }}/freelancer_folder
             go run autopatch.go
+
+        - name: Sprinkle with FLSR recipes
+          run: cp -r FLSR/FLHook/2.0/plugins/flsr_plugin ${{ github.workspace }}/freelancer_folder
 
         - name: temporal fix to flsr bugs
           shell: python
