@@ -48,8 +48,8 @@ jobs:
             latestTag=$(git describe --tags "$(git rev-list --tags --max-count=1)")
             git checkout $latestTag
             cd ..
-            sudo rm -r Freelancer | true
-            sudo rm -r FLHook | true
+            rm -r Freelancer | true
+            rm -r FLHook | true
             mv FLSR/Freelancer/ .
             mv FLSR/FLHook/ .
 
