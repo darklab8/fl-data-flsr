@@ -65,8 +65,7 @@ jobs:
               go-version: 1.22.5
 
         - name: Merge latest tag FLSR files (from Freelancer) to clean vanilla (freelancer_folder)
-          run: |
-            go run autopatch.go
+          run: go run autopatch.go
 
         - name: Sprinkle with FLSR recipes
           run: cp -r FLHook/2.0/plugins/flsr_plugin ${{ github.workspace }}/freelancer_folder
