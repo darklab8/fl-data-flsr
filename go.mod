@@ -1,4 +1,4 @@
-module FLSR
+module github.com/darklab8/fl-data-flsr
 
 go 1.23.4
 
