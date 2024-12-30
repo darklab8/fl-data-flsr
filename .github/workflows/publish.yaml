@@ -39,7 +39,7 @@ jobs:
           with:
             key: ${{ runner.os }}-flhook-${{ steps.data.outputs.BUILD_VERSION }}
             path: ${{ github.workspace }}/FLHook
-        - name: Load latest flsr
+        - name: Load latest tag of flsr
           if: ${{ steps.cache-freelancer.outputs.cache-hit != 'true' || steps.cache-flhook.outputs.cache-hit != 'true' }}
           run: |
             git clone https://github.com/Freelancer-Sirius-Revival/FLSR.git
@@ -53,19 +53,17 @@ jobs:
             mv FLSR/Freelancer/ .
             mv FLSR/FLHook/ .
 
-        - uses: darklab8/fl-configs/.github/actions/checkout-freelancer@master
+        - uses: darklab8/infra/.github/actions/checkout-freelancer@master
           with:
             freelancer-mod: "vanilla"
             freelancer-folder: ${{ github.workspace }}/freelancer_folder
             ssh-key-base64-vanilla: ${{ secrets.ID_RSA_FILES_FREELANCER_VANILLA }}
 
         - name: Set up Go
-          uses: actions/setup-go@v3
-          with:
-              go-version: 1.22.5
+          uses: darklab8/infra/.github/actions/install-go@master
 
         - name: Merge latest tag FLSR files (from Freelancer) to clean vanilla (freelancer_folder)
-          run: go run autopatch.go
+          run: go run autopatch.go -wd ${{ github.workspace }}/freelancer_folder
 
         - name: Sprinkle with FLSR recipes
           run: cp -r FLHook/2.0/plugins/flsr_plugin ${{ github.workspace }}/freelancer_folder

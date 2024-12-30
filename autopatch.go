@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"os"
 	"strings"
@@ -10,7 +11,9 @@ import (
 )
 
 func main() {
-	os.Chdir("./freelancer_folder")
+	f := flag.String("wd", ".", "...")
+	flag.Parse()
+	os.Chdir(*f)
 	println(os.Getwd())
 	current_directory, err := os.Getwd()
 	if err != nil {
