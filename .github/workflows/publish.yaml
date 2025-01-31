@@ -94,5 +94,5 @@ jobs:
         # Turn on ability to deploy to pages in repository settings, Pages tab
         # choose "Github Actions" deployment method to Pages
         - name: Deploy to pages
-          uses: actions/deploy-pages@v1
+          uses: actions/deploy-pages@v4
           id: deployment
