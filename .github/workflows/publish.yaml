@@ -65,20 +65,20 @@ jobs:
         - name: Merge latest tag FLSR files (from Freelancer) to clean vanilla (freelancer_folder)
           run: go run autopatch.go -wd ${{ github.workspace }}/freelancer_folder
 
-        - name: Sprinkle with FLSR recipes
-          run: cp Freelancer/EXE/flhook_plugins/FLSR-Crafting.cfg ${{ github.workspace }}/freelancer_folder/FLSR-Crafting.cfg
+        - name: Sprinkle with FLSR recipes like FLSR-Crafting.cfg and FLSR missions
+          run: cp Freelancer/EXE/flhook_plugins ${{ github.workspace }}/freelancer_folder/EXE/flhook_plugins
 
-        - name: temporal fix to flsr bugs
-          shell: python
-          run: |
-            filename = "${{ github.workspace }}/freelancer_folder/DATA/UNIVERSE/SYSTEMS/BR06/br06.ini"
-            with open(filename, "r") as file:
-              data = file.read()
+        # - name: temporal fix to flsr bugs
+        #   shell: python
+        #   run: |
+        #     filename = "${{ github.workspace }}/freelancer_folder/DATA/UNIVERSE/SYSTEMS/BR06/br06.ini"
+        #     with open(filename, "r") as file:
+        #       data = file.read()
 
-            replaced = data.replace("faction = cl_01_grp, 0-8", "faction = cl_01_grp, 0.8")
+        #     replaced = data.replace("faction = cl_01_grp, 0-8", "faction = cl_01_grp, 0.8")
 
-            with open(filename, "w") as file:
-              file.write(replaced)
+        #     with open(filename, "w") as file:
+        #       file.write(replaced)
 
         - uses: darklab8/fl-darkstat/.github/actions/build@master
           with:
