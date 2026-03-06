@@ -66,7 +66,7 @@ jobs:
           run: go run autopatch.go -wd ${{ github.workspace }}/freelancer_folder
 
         - name: Sprinkle with FLSR recipes like FLSR-Crafting.cfg and FLSR missions
-          run: cp Freelancer/EXE/flhook_plugins ${{ github.workspace }}/freelancer_folder/EXE/flhook_plugins
+          run: cp Freelancer/EXE/flhook_plugins -r ${{ github.workspace }}/freelancer_folder/EXE/flhook_plugins
 
         # - name: temporal fix to flsr bugs
         #   shell: python
