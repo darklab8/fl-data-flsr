@@ -26,7 +26,7 @@ jobs:
         name: github-pages
         url: ${{ steps.deployment.outputs.page_url }}
     steps:
-        - name: Called by
+        - name: Called by ${{ inputs.repository }}
           shell: bash
           run: |
             echo 'called by ${{ inputs.repository }}'
