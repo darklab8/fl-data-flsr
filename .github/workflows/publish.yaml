@@ -67,7 +67,6 @@ jobs:
           with:
             freelancer-mod: "vanilla"
             freelancer-folder: ${{ github.workspace }}/freelancer_folder
-            ssh-key-base64-vanilla: ${{ secrets.ID_RSA_FILES_FREELANCER_VANILLA }}
 
         - name: Set up Go
           uses: darklab8/infra/.github/actions/install-go@master
